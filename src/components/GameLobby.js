@@ -4,14 +4,25 @@ import invaderImage from '../assets/invader.png';
 import MainMenuButton from './MainMenuButton';
 
 const GameLobby = ({ game, onStartGame, onMainMenu }) => {
-  const instructions = {
+  const isTouchDevice = () => {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  };
+
+  const desktopInstructions = {
     'Space Invaders': [
       'Use Left and Right Arrow Keys to Move',
       'Press Spacebar to Shoot'
     ]
   };
 
-  const gameInstructions = instructions[game.name] || [];
+  const mobileInstructions = {
+    'Space Invaders': [
+      'Tap Left/Right side of screen to Move',
+      'Tap Middle of screen to Shoot'
+    ]
+  };
+
+  const gameInstructions = (isTouchDevice() ? mobileInstructions[game.name] : desktopInstructions[game.name]) || [];
 
   return (
     <div className="game-lobby">
