@@ -164,7 +164,7 @@ const GameScreen = ({ game, onPlayAgain, onMainMenu }) => {
             const candidates = currentInvaders.filter(invader => {
                 const invaderX = (invader.x / 100) * gameWidth;
                 const invaderY = (invader.y / 100) * gameHeight;
-                const invaderWidth = (4 / 100) * gameWidth;
+                const invaderWidth = (isTouchDevice() ? 8 : 4) / 100 * gameWidth;
                 const invaderHeight = (4 / 100) * gameHeight;
                 return laserX >= invaderX && laserX <= invaderX + invaderWidth &&
                        laserTipY >= invaderY && laserTipY <= invaderY + invaderHeight;
@@ -386,7 +386,41 @@ const GameScreen = ({ game, onPlayAgain, onMainMenu }) => {
       }
       setInvaders(newInvaders);
     }
-  }, [initialLoad, lives]);
+  }, [initialLoad]);
+
+  useEffect(() => {
+    if (!initialLoad && invaders.length === 0 && lives > 0) {
+      setLevel(l => l + 1);
+    }
+  }, [invaders, initialLoad, lives]);
+
+  useEffect(() => {
+    // This effect now correctly depends on `level` and will re-run when it changes.
+    if (!initialLoad) {
+       // Setup Invaders
+      const isMobile = isTouchDevice();
+      const invadersPerRow = isMobile ? 6 : 11;
+      const hSpacing = isMobile ? 14 : 7;
+      const hOffset = isMobile ? 10 : 5;
+      const vSpacing = isMobile ? 9 : 7;
+      
+      const newInvaders = [];
+      const invaderTypes = [invader4Image, invader3Image, invader2Image, invader1Image, invader1Image];
+      const invaderScores = [40, 30, 20, 10, 10];
+      for (let row = 0; row < 5; row++) {
+        for (let col = 0; col < invadersPerRow; col++) {
+          newInvaders.push({
+            id: `${row}-${col}`,
+            x: col * hSpacing + hOffset,
+            y: row * vSpacing + 10,
+            type: invaderTypes[row],
+            score: invaderScores[row],
+          });
+        }
+      }
+      setInvaders(newInvaders);
+    }
+  }, [level]);
 
   useEffect(() => {
     if (lives <= 0) {
