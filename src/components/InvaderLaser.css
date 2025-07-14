@@ -1,0 +1,7 @@
+.invader-laser {
+  width: 4px;
+  height: 20px;
+  background-color: #ff0; /* Yellow for invader lasers */
+  position: absolute;
+  box-shadow: 0 0 5px #ff0;
+} 

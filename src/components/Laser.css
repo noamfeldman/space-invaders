@@ -1,0 +1,7 @@
+.laser {
+  width: 4px;
+  height: 20px;
+  background-color: #f00; /* Bright red for the laser */
+  position: absolute;
+  box-shadow: 0 0 5px #f00;
+} 

@@ -1,0 +1,13 @@
+.shield {
+  position: absolute;
+  width: 10%;
+  height: 10%;
+}
+
+.shield-block {
+  position: absolute;
+  width: 20%; /* Relative to the shield container */
+  height: 20%;
+  background-color: #0f0; /* Green like the player */
+  box-shadow: 0 0 2px #0f0;
+} 

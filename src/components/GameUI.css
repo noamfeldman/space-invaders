@@ -1,0 +1,16 @@
+.game-ui {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5rem;
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.level {
+  text-align: center;
+} 

@@ -1,0 +1,24 @@
+.player {
+  width: 5%; /* Use percentage for responsive width */
+  height: auto;
+  position: absolute;
+  bottom: 30px;
+  /* left: 50%; */ /* This will now be controlled by inline style */
+  transform: translateX(-50%);
+}
+
+.player.hit {
+  animation: hit-glow 0.3s ease-out;
+}
+
+@keyframes hit-glow {
+  0% {
+    box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.7);
+  }
+} 

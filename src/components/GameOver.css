@@ -1,0 +1,96 @@
+.game-over {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 40px;
+  border: 2px solid #f00;
+  box-shadow: 0 0 15px #f00, 0 0 25px #f00;
+  text-align: center;
+  color: #fff;
+  z-index: 100;
+  animation: blink-glow 1.5s infinite alternate;
+}
+
+.game-over h2 {
+  font-size: 4rem;
+  color: #f00;
+  text-shadow: 0 0 10px #f00;
+  margin-bottom: 20px;
+}
+
+.game-over p {
+  font-size: 2rem;
+}
+
+.game-over-options {
+  margin-top: 30px;
+}
+
+.game-over-options button {
+  font-family: 'Press Start 2P', cursive;
+  background-color: #111;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 0 10px;
+}
+
+.game-over-options button:hover {
+  background-color: #fff;
+  color: #000;
+  box-shadow: 0 0 10px #fff;
+}
+
+.game-over form {
+  margin-top: 20px;
+}
+
+.game-over input {
+  font-family: 'Press Start 2P', cursive;
+  width: 100px;
+  padding: 10px;
+  font-size: 1.5rem;
+  text-align: center;
+  background-color: #222;
+  border: 2px solid #fff;
+  color: #fff;
+  margin-right: 10px;
+}
+
+.high-score-list {
+  list-style: none;
+  padding: 0;
+  margin: 30px 0 20px 0;
+  text-align: left;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.high-score-list li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.3rem;
+  padding: 6px 0;
+  border-bottom: 1px solid #333;
+}
+.high-score-list .initials {
+  color: #0fa;
+  font-family: 'Press Start 2P', cursive;
+}
+.high-score-list .score {
+  color: #fff;
+}
+
+@keyframes blink-glow {
+  from {
+    box-shadow: 0 0 10px #f00, 0 0 15px #f00;
+  }
+  to {
+    box-shadow: 0 0 20px #f00, 0 0 35px #f00;
+  }
+} 
