@@ -14,7 +14,7 @@ import invader2Image from '../assets/invader2.png';
 import invader3Image from '../assets/invader3.png';
 import invader4Image from '../assets/invader4.png';
 import playSound from '../utils/sound';
-import TouchControls from './TouchControls';
+import Joystick from './joystick.js';
 
 // Placeholder sound imports - we will need to add these files
 import shootSound from '../assets/sounds/shoot.wav';
@@ -78,21 +78,17 @@ const GameScreen = ({ game, onPlayAgain, onMainMenu }) => {
     return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   };
 
-  const handleTouchStart = (direction) => {
+  const handleJoystickMove = useCallback((direction) => {
     if (playerRef.current) {
-      if (direction === 'left' || direction === 'right') {
-        playerRef.current.move(direction);
-      } else if (direction === 'fire') {
-        playerRef.current.fire();
-      }
+      playerRef.current.move(direction);
     }
-  };
+  }, []);
 
-  const handleTouchEnd = () => {
+  const handleJoystickStop = useCallback(() => {
     if (playerRef.current) {
       playerRef.current.stop();
     }
-  };
+  }, []);
 
   const checkShieldCollision = (laser, gameWidth, gameHeight) => {
     for (const shield of shieldsRef.current) {
@@ -435,6 +431,40 @@ const GameScreen = ({ game, onPlayAgain, onMainMenu }) => {
     }
   }, [isGameOver]);
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (isGameOver) return;
+      switch (e.key) {
+        case 'ArrowLeft':
+          playerRef.current?.move('left');
+          break;
+        case 'ArrowRight':
+          playerRef.current?.move('right');
+          break;
+        case ' ': // Space bar
+          playerRef.current?.fire();
+          break;
+        default:
+          break;
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      if (isGameOver) return;
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        playerRef.current?.stop();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [isGameOver]);
+
   const fireLaser = (position) => {
     playSound(shootSound);
     setLasers(prevLasers => [...prevLasers, { id: Date.now(), ...position }]);
@@ -468,14 +498,14 @@ const GameScreen = ({ game, onPlayAgain, onMainMenu }) => {
       <Player ref={playerRef} onFire={fireLaser} isHit={playerIsHit} />
       {lasers.map(laser => <Laser key={laser.id} position={{ x: laser.x, y: laser.y }} />)}
       {invaders.map(invader => (
-        <Invader key={invader.id} x={invader.x} y={invader.y} type={invader.type} />
+        <Invader key={invader.id} x={invader.x} y={invader.y} image={invader.type} />
       ))}
       {invaderLasers.map(laser => <InvaderLaser key={laser.id} position={{ x: laser.x, y: laser.y }} />)}
       {shields.map(shield => (
         <Shield key={shield.id} blocks={shield.blocks} position={shield.position} />
       ))}
       {mysteryShip && <MysteryShip position={mysteryShip} />}
-      {isTouchDevice() && !isGameOver && <TouchControls onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} />}
+      {isTouchDevice() && !isGameOver && <Joystick onMove={handleJoystickMove} onStop={handleJoystickStop} onFire={() => playerRef.current.fire()} />}
     </div>
   );
 };

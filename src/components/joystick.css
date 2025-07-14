@@ -1,0 +1,42 @@
+.joystick-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    width: 100%;
+}
+
+.joystick {
+    width: 150px;
+    height: 150px;
+}
+
+#joystick {
+    border-radius: 50%;
+}
+
+
+.fire-button {
+    position: absolute;
+    right: 20px;
+    bottom: 0;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: rgba(255, 68, 68, 0.5); /* semi-transparent red */
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: 2px solid rgba(204, 0, 0, 0.5);
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent; /* for mobile */
+}
+
+.fire-button:active {
+    background-color: rgba(204, 0, 0, 0.7);
+} 

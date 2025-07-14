@@ -23,32 +23,6 @@ const Player = React.forwardRef(({ onFire, isHit }, ref) => {
   }));
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'ArrowLeft') {
-        setMoveDirection('left');
-      } else if (e.key === 'ArrowRight') {
-        setMoveDirection('right');
-      } else if (e.key === ' ') { // Spacebar
-        onFire({ x: position, y: 90 }); // Fire from player's position
-      }
-    };
-
-    const handleKeyUp = (e) => {
-      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-        setMoveDirection('none');
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
-    };
-  }, [position, onFire]);
-
-  useEffect(() => {
     let moveInterval;
     if (moveDirection !== 'none') {
       moveInterval = setInterval(() => {
