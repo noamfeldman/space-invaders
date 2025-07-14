@@ -30,6 +30,14 @@
   border: none;
 }
 
+.touch-fire-wide {
+  position: absolute;
+  bottom: 100px;
+  left: 0;
+  width: 100%;
+  height: 100px;
+}
+
 .touch-fire {
   position: absolute;
   left: 50%;

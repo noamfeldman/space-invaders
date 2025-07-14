@@ -4,6 +4,13 @@ import './TouchControls.css';
 const TouchControls = ({ onTouchStart, onTouchEnd }) => {
   return (
     <div className="touch-controls">
+      <div className="touch-fire-wide">
+        <button
+          className="touch-button"
+          onTouchStart={() => onTouchStart('fire')}
+          onTouchEnd={() => onTouchEnd('fire')}
+        />
+      </div>
       <div className="touch-left">
         <button
           className="touch-button"
