@@ -1,13 +1,13 @@
 import React from 'react';
 import './Invader.css';
 
-const Invader = ({ position, image }) => {
+const Invader = ({ x, y, type }) => {
   return (
     <img 
-      src={image} 
+      src={type} 
       className="invader" 
       alt="invader" 
-      style={{ left: `${position.x}%`, top: `${position.y}%` }} 
+      style={{ left: `${x}%`, top: `${y}%` }} 
     />
   );
 };

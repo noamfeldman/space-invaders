@@ -10,4 +10,11 @@
   height: 20%;
   background-color: #0f0; /* Green like the player */
   box-shadow: 0 0 2px #0f0;
+}
+
+@media (max-width: 768px) and (orientation: portrait) {
+  .shield {
+    width: 12%;
+    height: 6%;
+  }
 } 

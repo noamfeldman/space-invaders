@@ -2,4 +2,10 @@
   width: 4%;
   height: auto;
   position: absolute;
+}
+
+@media (max-width: 768px) and (orientation: portrait) {
+  .invader {
+    width: 10%;
+  }
 } 

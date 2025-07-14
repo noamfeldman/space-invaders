@@ -14,6 +14,7 @@ import invader2Image from '../assets/invader2.png';
 import invader3Image from '../assets/invader3.png';
 import invader4Image from '../assets/invader4.png';
 import playSound from '../utils/sound';
+import TouchControls from './TouchControls';
 
 // Placeholder sound imports - we will need to add these files
 import shootSound from '../assets/sounds/shoot.wav';
@@ -72,6 +73,26 @@ const GameScreen = ({ game, onPlayAgain, onMainMenu }) => {
   const [showHighScores, setShowHighScores] = useState(false);
   const [highScores, setHighScores] = useState([]);
   const [playerIsHit, setPlayerIsHit] = useState(false);
+
+  const isTouchDevice = () => {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  };
+
+  const handleTouchStart = (direction) => {
+    if (playerRef.current) {
+      if (direction === 'left' || direction === 'right') {
+        playerRef.current.move(direction);
+      } else if (direction === 'fire') {
+        playerRef.current.fire();
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (playerRef.current) {
+      playerRef.current.stop();
+    }
+  };
 
   const checkShieldCollision = (laser, gameWidth, gameHeight) => {
     for (const shield of shieldsRef.current) {
@@ -248,7 +269,7 @@ const GameScreen = ({ game, onPlayAgain, onMainMenu }) => {
             if (l > 0) {
                 playSound(playerHitSound);
                 setPlayerIsHit(true);
-                setTimeout(() => setPlayerIsHit(false), 300); // Glow for 300ms
+                setTimeout(() => setPlayerIsHit(false), 500); // Flash for 0.5s
                 return l - 1;
             }
             return 0;
@@ -303,86 +324,69 @@ const GameScreen = ({ game, onPlayAgain, onMainMenu }) => {
   //   );
   // };
 
-  const resetLevel = useCallback(() => {
-    // Logic to create invaders based on level
-    const initialInvaders = [];
-    const scoreValues = [30, 20, 20, 10, 10];
-    const invaderImages = [invader1Image, invader2Image, invader3Image, invader4Image, invader1Image];
-    for (let row = 0; row < 5; row++) {
-      for (let col = 0; col < 10; col++) {
-        initialInvaders.push({
-          id: `${row}-${col}`,
-          x: 10 + col * 8,
-          y: 10 + row * 8,
-          image: invaderImages[row],
-          score: scoreValues[row],
-        });
-      }
-    }
-    setInvaders(initialInvaders);
-    invaderDirectionRef.current = 1;
-
-    // Reset mystery ship for new level
-    setMysteryShip(null);
-  }, []);
-
   useEffect(() => {
-    playSound(gameStartSound);
-    resetLevel();
-    setInitialLoad(false);
-  }, [resetLevel]);
+    if (initialLoad) {
+      setInitialLoad(false);
+      playSound(gameStartSound);
+      
+      // Setup Shields
+      const newShields = [
+        { id: 1, position: { x: 15 }, blocks: [] },
+        { id: 2, position: { x: 45 }, blocks: [] },
+        { id: 3, position: { x: 75 }, blocks: [] },
+      ].map(shield => {
+        const shieldPosition = { ...shield.position };
+        if (isTouchDevice()) {
+          shieldPosition.bottom = 160;
+        } else {
+          shieldPosition.y = 75;
+        }
 
-  useEffect(() => {
-    if (!initialLoad && invaders.length === 0 && lives > 0) {
-      setLevel(l => l + 1);
-      resetLevel();
-    }
-  }, [invaders, lives, resetLevel, initialLoad]);
-
-  useEffect(() => {
-    // Create initial shields
-    const initialShields = [];
-    const blockWidth = 100 / shieldShape[0].length;
-    const blockHeight = 100 / shieldShape.length;
-
-    for (let i = 0; i < 4; i++) {
-      const shieldBlocks = [];
-      shieldShape.forEach((row, rowIndex) => {
-        row.forEach((col, colIndex) => {
-          if (col === 1) {
-            shieldBlocks.push({
-              id: `shield-${i}-block-${rowIndex}-${colIndex}`,
-              x: colIndex * blockWidth,
-              y: rowIndex * blockHeight,
-              width: blockWidth,
-              height: blockHeight,
-              health: 4,
-            });
+        const blocks = [];
+        const blockWidth = 100 / shieldShape[0].length;
+        const blockHeight = 100 / shieldShape.length;
+        for (let r = 0; r < shieldShape.length; r++) {
+          for (let c = 0; c < shieldShape[r].length; c++) {
+            if (shieldShape[r][c] === 1) {
+              blocks.push({
+                id: `shield-${shield.id}-block-${r}-${c}`,
+                x: c * blockWidth,
+                y: r * blockHeight,
+                width: blockWidth,
+                height: blockHeight,
+                health: 4,
+              });
+            }
           }
-        });
+        }
+        return { ...shield, blocks, position: shieldPosition };
       });
-      initialShields.push({
-        id: `shield-${i}`,
-        blocks: shieldBlocks,
-        position: { x: 15 + i * 20, y: 20 },
-      });
-    }
-    setShields(initialShields);
-  }, []);
+      setShields(newShields);
 
-  useEffect(() => {
-    // Adjust invader speed based on level
-    // invaderSpeedRef.current = 500 - (level * 50); // This line was removed as per the new_code, as level state is no longer managed here.
-  }, [level]); // This line was removed as per the new_code, as level state is no longer managed here.
-
-  useEffect(() => {
-    const mysteryShipInterval = setInterval(() => {
-      if (!mysteryShip) {
-        setMysteryShip({ x: 0, y: 5, score: 100 });
+      // Setup Invaders
+      const isMobile = isTouchDevice();
+      const invadersPerRow = isMobile ? 6 : 11;
+      const hSpacing = isMobile ? 14 : 7;
+      const hOffset = isMobile ? 10 : 5;
+      const vSpacing = isMobile ? 9 : 7;
+      
+      const newInvaders = [];
+      const invaderTypes = [invader4Image, invader3Image, invader2Image, invader1Image, invader1Image];
+      const invaderScores = [40, 30, 20, 10, 10];
+      for (let row = 0; row < 5; row++) {
+        for (let col = 0; col < invadersPerRow; col++) {
+          newInvaders.push({
+            id: `${row}-${col}`,
+            x: col * hSpacing + hOffset,
+            y: row * vSpacing + 10,
+            type: invaderTypes[row],
+            score: invaderScores[row],
+          });
+        }
       }
-    }, 15000); // Appear every 15 seconds
-    return () => clearInterval(mysteryShipInterval);
-  }, [mysteryShip]);
+      setInvaders(newInvaders);
+    }
+  }, [initialLoad, lives]);
 
   useEffect(() => {
     if (lives <= 0) {
@@ -430,13 +434,14 @@ const GameScreen = ({ game, onPlayAgain, onMainMenu }) => {
       <Player ref={playerRef} onFire={fireLaser} isHit={playerIsHit} />
       {lasers.map(laser => <Laser key={laser.id} position={{ x: laser.x, y: laser.y }} />)}
       {invaders.map(invader => (
-        <Invader key={invader.id} position={{ x: invader.x, y: invader.y }} image={invader.image} />
+        <Invader key={invader.id} x={invader.x} y={invader.y} type={invader.type} />
       ))}
       {invaderLasers.map(laser => <InvaderLaser key={laser.id} position={{ x: laser.x, y: laser.y }} />)}
       {shields.map(shield => (
         <Shield key={shield.id} blocks={shield.blocks} position={shield.position} />
       ))}
       {mysteryShip && <MysteryShip position={mysteryShip} />}
+      {isTouchDevice() && !isGameOver && <TouchControls onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} />}
     </div>
   );
 };

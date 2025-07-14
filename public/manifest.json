@@ -1,6 +1,7 @@
 {
   "short_name": "Space Invaders",
   "name": "Space Invaders - Arcade Classics",
+  "description": "A classic arcade game of Space Invaders, built by Noam Feldman with React.",
   "icons": [
     {
       "src": "invader.png",
