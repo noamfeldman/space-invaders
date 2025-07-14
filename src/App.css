@@ -23,8 +23,13 @@ body {
 }
 
 h1.neon-text {
-    font-size: 4rem;
-    margin: 40px 0;
+    font-size: 3rem;
+    margin: 20px 0 10px;
+}
+
+h2.neon-text {
+    font-size: 2rem;
+    margin: 0 0 20px;
 }
 
 .neon-button {
