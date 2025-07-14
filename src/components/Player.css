@@ -9,7 +9,7 @@
 
 @media (max-width: 768px) and (orientation: portrait) {
   .player {
-    bottom: 120px;
+    bottom: 40px;
     width: 8%;
   }
 }
