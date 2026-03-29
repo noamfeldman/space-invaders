@@ -95,7 +95,9 @@ const GameScreen = ({ game, onPlayAgain, onMainMenu }) => {
       for (const block of shield.blocks) {
         if (block.health > 0) {
           const shieldX = (shield.position.x / 100) * gameWidth;
-          const shieldY = (shield.position.y / 100) * gameHeight;
+          const shieldY = shield.position.y !== undefined 
+            ? (shield.position.y / 100) * gameHeight 
+            : gameHeight - shield.position.bottom - (5 / 100 * gameHeight);
 
           const blockX = shieldX + (block.x / 100) * (10 / 100 * gameWidth);
           const blockY = shieldY + (block.y / 100) * (5 / 100 * gameHeight);
