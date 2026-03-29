@@ -26,7 +26,7 @@ const Joystick = ({ onMove, onStop, onFire }) => {
             }
             joystickInstance.current = null;
         }
-    }, []);
+    }, [onMove, onStop]);
 
     return (
         <div className="joystick-container">

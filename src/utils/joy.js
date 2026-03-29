@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * @desc A component that renders a joystick on a canvas.
  * @version 2.0.0

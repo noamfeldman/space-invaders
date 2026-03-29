@@ -4,13 +4,11 @@ import MainMenuButton from './MainMenuButton';
 
 const GameOver = ({ score, onPlayAgain, onMainMenu, onHighScoreSubmit, highScores, showHighScores }) => {
   const [initials, setInitials] = useState('');
-  const [submitted, setSubmitted] = useState(false);
   const isHighScore = score > 100 && !showHighScores; // Placeholder logic
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onHighScoreSubmit(initials);
-    setSubmitted(true);
   };
 
   if (showHighScores) {

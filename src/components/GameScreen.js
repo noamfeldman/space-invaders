@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { getHighScores, saveHighScore } from '../utils/highScores';
+import { saveHighScore } from '../utils/highScores';
 import GameOver from './GameOver';
 import './GameScreen.css';
 import GameUI from './GameUI';
@@ -49,7 +49,7 @@ const GameScreen = ({ game, onPlayAgain, onMainMenu }) => {
   const [shields, setShields] = useState([]);
   const [mysteryShip, setMysteryShip] = useState(null);
   const [isGameOver, setIsGameOver] = useState(false);
-  const invaderMoveLoopRef = useRef(null);
+
   const gameLoopRef = useRef(null);
   const playerRef = useRef(null);
   const gameLoopCounterRef = useRef(0);
@@ -418,7 +418,7 @@ const GameScreen = ({ game, onPlayAgain, onMainMenu }) => {
       }
       setInvaders(newInvaders);
     }
-  }, [level]);
+  }, [level, initialLoad]);
 
   useEffect(() => {
     if (lives <= 0) {
