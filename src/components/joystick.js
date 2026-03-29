@@ -8,7 +8,7 @@ const Joystick = ({ onMove, onStop, onFire }) => {
 
     useEffect(() => {
         if (!joystickInstance.current && joystickContainerRef.current) {
-            joystickInstance.current = new JoyStick(joystickContainerRef.current, {}, function(stickData) {
+            joystickInstance.current = new JoyStick(joystickContainerRef.current, { width: 150, height: 150 }, function(stickData) {
                 const x = parseInt(stickData.x, 10);
                 if (x > 20) {
                     onMove('right');

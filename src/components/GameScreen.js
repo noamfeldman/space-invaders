@@ -162,8 +162,8 @@ const GameScreen = ({ game, onPlayAgain, onMainMenu }) => {
             const candidates = currentInvaders.filter(invader => {
                 const invaderX = (invader.x / 100) * gameWidth;
                 const invaderY = (invader.y / 100) * gameHeight;
-                const invaderWidth = (isTouchDevice() ? 8 : 4) / 100 * gameWidth;
-                const invaderHeight = (4 / 100) * gameHeight;
+                const invaderWidth = (isTouchDevice() ? 10 : 4) / 100 * gameWidth;
+                const invaderHeight = (isTouchDevice() ? 8 : 4) / 100 * gameHeight;
                 return laserX >= invaderX && laserX <= invaderX + invaderWidth &&
                        laserTipY >= invaderY && laserTipY <= invaderY + invaderHeight;
             });
